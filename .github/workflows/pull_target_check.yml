@@ -1,0 +1,19 @@
+name: Check Pull Target
+
+on:
+  pull_request_target:
+    types: [opened, reopened]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  close_pr:
+    if: github.event.pull_request.base.ref != 'dev' && github.event.pull_request.base.ref != github.event.repository.default_branch
+    runs-on: ubuntu-latest
+    steps:
+      # Metadata-only triage: never check out or execute pull-request code here.
+      - name: Close PR if it targets neither dev nor the default branch
+        uses: superbrothers/close-pull-request@v3
+        with:
+          comment: "Invalid PR target branch `${{ github.event.pull_request.base.ref }}`."
