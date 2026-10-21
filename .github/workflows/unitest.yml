@@ -1,5 +1,7 @@
 name: Unit Test
 on: [ push, pull_request ]
+permissions:
+  contents: read
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -7,10 +9,12 @@ jobs:
       matrix:
         python-version: ["3.8", "3.9", "3.10"]
         os: [ubuntu-latest]
-      fail-fast: true
+      fail-fast: false
 
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v4
+      with:
+        persist-credentials: false
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
       with:
@@ -21,11 +25,12 @@ jobs:
         sudo apt -y install ffmpeg
         sudo apt -y install -qq aria2
         aria2c --console-log-level=error -c -x 16 -s 16 -k 1M https://huggingface.co/lj1995/VoiceConversionWebUI/resolve/main/hubert_base.pt -d ./ -o hubert_base.pt
-        python -m pip install --upgrade pip
-        python -m pip install --upgrade setuptools
-        python -m pip install --upgrade wheel
-        pip install torch torchvision torchaudio
-        pip install -r requirements.txt
+        # Current uv normalizes OmegaConf 2.0's invalid PyYAML>=5.1.* metadata.
+        # Preserve fairseq compatibility without downgrading pip or skipping dependencies.
+        python -m pip install "uv==0.13.4"
+        uv pip install --system torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+        uv pip install --system -r requirements.txt
+        uv pip check
     - name: Test step 1 & 2
       run: |
         mkdir -p logs/mi-test
