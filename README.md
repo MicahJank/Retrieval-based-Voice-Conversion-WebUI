@@ -191,3 +191,21 @@ python infer-web.py
   <img src="https://contrib.rocks/image?repo=RVC-Project/Retrieval-based-Voice-Conversion-WebUI" />
 </a>
 
+
+
+### Python certificate security
+
+For the October 2026 emSign incident, use certifi 2026.10.19+, pip 26.2.2+
+(Python 3.10+), and uv 0.13.4+. Existing environments also need updating.
+The CI bootstrap verifies a fixed wheel hash before using its network installer.
+Build container images with `docker build --pull --no-cache .` to refresh system certificates.
+
+For the legacy Windows DirectML export, first update conda to 26.9.4 or newer.
+Run `powershell -File tools/create_dml_environment.ps1 -Name pydml-secure`.
+The helper refuses to replace an existing environment. It creates the conda base,
+then installs the original Python dependency pins with current uv, which accepts
+the legacy OmegaConf metadata without requiring a vulnerable pip downgrade.
+For manual setup: create `environment_dml.yaml`, activate that environment, then
+run `python -m uv pip install --python python -r requirements-dml-legacy.txt`.
+Old dependencies may need a separate compatibility migration if their original
+distributions are no longer available; do not work around this by disabling TLS.
