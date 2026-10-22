@@ -53,3 +53,5 @@ av
 PySimpleGUI
 sounddevice
 torchfcpe
+# emSign certificate incident: require the corrected CA bundle.
+certifi>=2026.10.19
