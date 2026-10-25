@@ -37,9 +37,15 @@ def verify():
             values = np.load(output, allow_pickle=False)
             if not values.size or not np.isfinite(values).all():
                 raise RuntimeError("Empty or non-finite extraction: {}".format(output))
-            if folder == "3_feature256" and (values.ndim != 2 or values.shape[1] != 256):
+            if folder == "3_feature256" and (
+                values.ndim != 2 or values.shape[1] != 256
+            ):
                 raise RuntimeError("Unexpected feature shape: {}".format(values.shape))
-    print("Verified preprocessing, pitch and HuBERT features for {} clips".format(len(waves)))
+    print(
+        "Verified preprocessing, pitch and HuBERT features for {} clips".format(
+            len(waves)
+        )
+    )
 
 
 if __name__ == "__main__":
