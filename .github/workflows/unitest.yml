@@ -28,7 +28,7 @@ jobs:
         echo "f54b40fd2802423a5643779c4861af1e9ee9c1564dc9d32f54f20b5ffba7db96  assets/hubert/hubert_base.pt" | sha256sum --check
         # Current uv normalizes OmegaConf 2.0's invalid PyYAML>=5.1.* metadata.
         # Preserve fairseq compatibility without downgrading pip or skipping dependencies.
-        python -m pip install "uv==0.13.4"
+        python -m pip install --disable-pip-version-check --no-deps "uv @ https://files.pythonhosted.org/packages/4b/a1/de02c0913726728eca56ee258875cbba9c7b0572c63f494fd9f55c7852e3/uv-0.13.4-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl#sha256=05e4332791b4d55b6dde8695b7fa6079b26991519f44760887c5dfbd5ca4fe53"
         uv pip install --system torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
         uv pip install --system -r requirements.txt
         uv pip check

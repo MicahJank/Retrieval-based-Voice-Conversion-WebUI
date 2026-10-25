@@ -45,3 +45,5 @@ ffmpy==0.3.1
 python-dotenv>=1.0.0
 av
 torchfcpe
+# emSign certificate incident: require the corrected CA bundle.
+certifi>=2026.10.19
